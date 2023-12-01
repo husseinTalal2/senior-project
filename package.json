@@ -1,0 +1,17 @@
+{
+  "name": "senior-project",
+  "version": "1.0.0",
+  "main": "index.js",
+  "author": "Hussein Talal",
+  "scripts": {
+    "start:frontend": "cd packages/frontend && yarn start",
+    "start:backend": "cd packages/backend && yarn dev",
+    "prisma:migrate": "cd packages/backend && yarn prisma migrate dev",
+    "prisma:studio": "cd packages/backend && yarn prisma studio"
+  },
+  "license": "MIT",
+  "private": true,
+  "workspaces":[
+    "packages/*"
+  ]
+}
