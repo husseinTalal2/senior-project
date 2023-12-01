@@ -11,7 +11,85 @@ datasource db {
 }
 
 model Location {
-  id        Int     @id @default(autoincrement())
+  id        Int   @id @default(autoincrement())
   longitude Float
   latitude  Float
+  court Court[]
+}
+
+// User model
+model User {
+  id      Int    @id @default(autoincrement())
+  name    String
+  email   String
+  role    Role
+  teams   Team[] @relation(name: "teamMembers")
+  captain Team?  @relation("captain")
+  owner Owner?
+  joinRequests Team[] @relation(name: "joinRequests")
+}
+
+model Owner {
+  id      Int    @id @default(autoincrement())
+  user    User @relation(fields: [userId], references: [id])
+  userId  Int  @unique
+  courts Court[]
+}
+
+// Team model
+model Team {
+  id          Int          @id @default(autoincrement())
+  name        String
+  logo        String
+  members     User[]       @relation("teamMembers")
+  captain     User         @relation(fields: [captainId], references: [id], name: "captain")
+  captainId   Int          @unique
+  reservation Reservation @relation(fields: [reservationId], references: [id])
+  reservationId Int
+  joinRequests User[] @relation(name: "joinRequests")
+}
+
+model Reservation {
+  id       Int      @id @default(autoincrement())
+  from DateTime
+  to DateTime
+  teams     Team[]
+  court Court @relation(fields: [courtId], references: [id])
+  courtId Int
+  status ReservationStatus[]
+}
+
+model Court {
+  id       Int      @id @default(autoincrement())
+  schedule DateTime[]
+  reservations Reservation[]
+  owner Owner @relation(fields: [ownerId], references: [id])
+  ownerId Int
+  location Location @relation(fields: [locationId], references: [id])
+  locationId Int
+  address String
+  pricePerHour Int
+  facilities Facilities[]
+  rating Float?
+  phoneNumber String
+}
+
+enum ReservationStatus {
+  PENDING
+  CONFIRMED
+  DECLINED
+  NO_ENOUGH_PLAYERS
+}
+
+enum Facilities {
+  SHOWERS
+  CHANGING_ROOMS
+  INDOOR
+  OUTDOOR
+}
+
+enum Role {
+  ADMIN
+  OWNER
+  USER
 }

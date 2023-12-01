@@ -10,6 +10,7 @@ function Header() {
   const insets = useSafeAreaInsets();
   const theme = useTheme();
   const router = useRouter();
+
   return (
     <View
       style={{
