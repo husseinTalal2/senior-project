@@ -7,7 +7,7 @@ generator client {
 
 datasource db {
   provider = "postgresql"
-  url      = "postgresql://root:root@localhost:5432/lezzoo-task"
+  url      = "postgresql://postgres:U9LF7TdpniQfByVX@db.knsldowwwgdcrjdgyvnj.supabase.co:5432/postgres"
 }
 
 model Location {
