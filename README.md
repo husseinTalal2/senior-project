@@ -1,4 +1,4 @@
-# lezzoo-task
+# Senior Project
 
 The project is a monorepo with 2 packages, frontend and backend
 
