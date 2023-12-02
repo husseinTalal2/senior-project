@@ -48,8 +48,9 @@ const styles = (theme: Theme) =>
       }),
     },
     input: {
+      ...theme.fonts.body["16pt_regular"],
+      color: theme.colors.shade02,
       flex: 1,
-      fontSize: 16,
     },
     iconContainer: {
       marginLeft: 10,

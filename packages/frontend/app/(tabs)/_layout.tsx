@@ -18,7 +18,8 @@ export default function TabLayout() {
       screenOptions={{
         headerShown: false,
         tabBarStyle: { paddingTop: 8 },
-        tabBarActiveTintColor: theme.colors.primary,
+        tabBarActiveTintColor: theme.colors.shade02,
+        tabBarLabelStyle: theme.fonts.body["12pt_regular"],
       }}
     >
       <Tabs.Screen

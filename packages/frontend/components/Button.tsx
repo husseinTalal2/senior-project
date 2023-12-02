@@ -9,7 +9,7 @@ function Button({
   prefixIcon,
   style,
   text,
-  type = "primary",
+  type = "primary01",
   disabled,
 }: Props) {
   const theme = useTheme();
@@ -22,21 +22,17 @@ function Button({
           flexDirection: "row",
           justifyContent: "center",
           alignItems: "center",
-          backgroundColor: disabled
-            ? theme.colors.disabled
-            : theme.colors[type],
+          backgroundColor: disabled ? theme.colors.shade02 : theme.colors[type],
           paddingHorizontal: theme.spacing.lg,
           paddingVertical: theme.spacing.md,
-          borderRadius: theme.borderRadius.lg,
+          borderRadius: theme.borderRadius.sm,
           opacity: pressed || disabled ? 0.8 : 1,
         },
         style,
       ]}
     >
       {!!prefixIcon && prefixIcon}
-      {!!text && (
-        <Text style={{ color: theme.colors.textOnColor }}>{text}</Text>
-      )}
+      {!!text && <Text style={{ color: theme.colors.shade01 }}>{text}</Text>}
       {!!postfixIcon && postfixIcon}
     </Pressable>
   );

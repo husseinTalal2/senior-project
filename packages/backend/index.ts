@@ -1,1 +1,1 @@
-export { AppRouter } from "./src/routers/_app";
+export { AppRouter, RouterInputs, RouterOutput } from "./src/routers/_app";

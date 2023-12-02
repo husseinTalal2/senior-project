@@ -61,8 +61,7 @@ function CourtScreen() {
           <View
             style={{
               paddingHorizontal: theme.spacing["2xl"],
-              paddingTop: theme.spacing["2xl"],
-              paddingBottom: theme.spacing["4xl"],
+              paddingVertical: theme.spacing["2xl"],
             }}
           >
             <View
@@ -74,12 +73,25 @@ function CourtScreen() {
               }}
             >
               <View>
-                <Text>{court.data.address}</Text>
-                <Text>{court.data.address}</Text>
+                <Text
+                  style={{
+                    ...theme.fonts.header["22pt_semibold"],
+                    color: theme.colors.shade02,
+                  }}
+                >
+                  {court.data.address}
+                </Text>
+                <Text
+                  style={{
+                    ...theme.fonts.body["14pt_regular"],
+                    color: theme.colors.neutral08,
+                  }}
+                >
+                  {court.data.address}
+                </Text>
               </View>
               <View>
                 {court.data.rating && <Text>{court.data.rating}</Text>}
-                <Text>${court.data.pricePerHour} / Hour</Text>
               </View>
             </View>
             <Divider />
@@ -115,7 +127,7 @@ function CourtScreen() {
             }),
           }}
         >
-          <Text style={theme.fonts.headline.small}>
+          <Text style={theme.fonts.header["22pt_semibold"]}>
             {court.data.pricePerHour}$/Hour
           </Text>
           <Button
@@ -169,12 +181,20 @@ function Facility({ facility }: { facility: string }) {
       }}
     >
       {getIcon(facility)}
-      <Text style={{ marginTop: theme.spacing.sm }}>{facility}</Text>
+      <Text
+        style={{
+          marginTop: theme.spacing.sm,
+          ...theme.fonts.body["14pt_regular"],
+          color: theme.colors.shade02,
+        }}
+      >
+        {facility}
+      </Text>
     </View>
   );
 }
 
-function CourtType({ courtType }: { courtType: string }) {
+export function CourtType({ courtType }: { courtType: string }) {
   const theme = useTheme();
   return (
     <View
@@ -185,7 +205,14 @@ function CourtType({ courtType }: { courtType: string }) {
       }}
     >
       <SoccerBall weight="thin" size={32} />
-      <Text>{courtType}</Text>
+      <Text
+        style={{
+          ...theme.fonts.body["13pt_semibold"],
+          color: theme.colors.shade02,
+        }}
+      >
+        {courtType}
+      </Text>
     </View>
   );
 }

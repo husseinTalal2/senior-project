@@ -32,13 +32,34 @@ function CourtItem({ court }: { court: RouterOutput["court"]["getAll"][0] }) {
         />
       </View>
       <View style={styles(theme).infoContainer}>
-        <View>
-          <Text>{court.address}</Text>
-          <Text>{court.address}</Text>
+        <View style={{ gap: 6 }}>
+          <Text
+            style={{
+              ...theme.fonts.body["14pt_semibold"],
+              color: theme.colors.shade02,
+            }}
+          >
+            {court.address}
+          </Text>
+          <Text
+            style={{
+              ...theme.fonts.body["12pt_regular"],
+              color: theme.colors.neutral08,
+            }}
+          >
+            {court.address}
+          </Text>
         </View>
         <View>
           {court.rating && <Text>{court.rating}</Text>}
-          <Text>${court.pricePerHour} / Hour</Text>
+          <Text
+            style={{
+              ...theme.fonts.body["14pt_semibold"],
+              color: theme.colors.shade02,
+            }}
+          >
+            ${court.pricePerHour} / Hour
+          </Text>
         </View>
       </View>
     </Pressable>
