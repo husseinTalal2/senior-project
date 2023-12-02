@@ -7,91 +7,74 @@ import Button from "./Button";
 import useTheme from "../utils/hooks/useTheme";
 import { Theme } from "../constants/Theme";
 
+type Location = {
+  latitude: number;
+  longitude: number;
+};
 type Props = {
-  setLocation: (props: LatLng) => void;
+  // setLocation: (props: LatLng) => void;
+  location: Location;
 };
 
-function Map({ setLocation }: Props) {
+function Map({ location }: Props) {
   const theme = useTheme();
-  const [markedLocation, setMarkedLocation] = useState<LatLng | null>(null);
-  const [userLocation, setUserLocation] = useState<LatLng | null>(null);
+  // const [markedLocation, setMarkedLocation] = useState<LatLng | null>(null);
+  // const [userLocation, setUserLocation] = useState<LatLng | null>(null);
 
-  useEffect(() => {
-    const requestLocationPermission = async () => {
-      let { status } = await Location.requestForegroundPermissionsAsync();
-      if (status !== "granted") {
-        return;
-      }
+  // useEffect(() => {
+  //   const requestLocationPermission = async () => {
+  //     let { status } = await Location.requestForegroundPermissionsAsync();
+  //     if (status !== "granted") {
+  //       return;
+  //     }
 
-      let location = await Location.getCurrentPositionAsync({});
-      setUserLocation(location.coords);
-    };
+  //     let location = await Location.getCurrentPositionAsync({});
+  //     setUserLocation(location.coords);
+  //   };
 
-    requestLocationPermission();
-  }, []);
+  //   requestLocationPermission();
+  // }, []);
 
-  const nav = useNavigation();
+  // const nav = useNavigation();
 
-  const handleMyLocationPress = () => {
-    if (userLocation) setLocation(userLocation);
-  };
+  // const handleMyLocationPress = () => {
+  //   if (userLocation) setLocation(userLocation);
+  // };
 
-  const handleMarkerLocationPress = () => {
-    if (markedLocation) setLocation(markedLocation);
-  };
+  // const handleMarkerLocationPress = () => {
+  //   if (markedLocation) setLocation(markedLocation);
+  // };
 
-  const handleSettingMarker = (cord: LatLng) => {
-    setMarkedLocation(cord);
-  };
+  // const handleSettingMarker = (cord: LatLng) => {
+  //   setMarkedLocation(cord);
+  // };
 
   return (
-    <View style={styles(theme).container}>
-      <View
-        style={[
-          {
-            flexDirection: "row",
-            width: "100%",
-            gap: theme.spacing.md,
-            paddingHorizontal: theme.spacing.md,
-            alignItems: "center",
-            justifyContent: "center",
-          },
-          styles(theme).selectButtons,
-        ]}
-      >
-        <Button onPress={handleMyLocationPress} text="Use my location" />
-        {!!markedLocation && (
-          <Button
-            onPress={handleMarkerLocationPress}
-            text="Use marked location"
-          />
-        )}
-      </View>
-
-      <MapView
-        onPress={({ nativeEvent }) => {
-          handleSettingMarker(nativeEvent.coordinate);
+    <MapView
+      // onPress={({ nativeEvent }) => {
+      //   handleSettingMarker(nativeEvent.coordinate);
+      // }}
+      style={{
+        width: "100%",
+        height: 220,
+        marginVertical: theme.spacing["2xl"],
+      }}
+      // showsUserLocation
+      // followsUserLocation
+      initialRegion={{
+        latitude: 36.1901,
+        longitude: 43.993,
+        latitudeDelta: 0.2,
+        longitudeDelta: 0.25,
+      }}
+    >
+      <Marker
+        coordinate={{
+          latitude: location.latitude,
+          longitude: location.longitude,
         }}
-        style={styles(theme).map}
-        showsUserLocation
-        followsUserLocation
-        initialRegion={{
-          latitude: 36.1901,
-          longitude: 43.993,
-          latitudeDelta: 0.3,
-          longitudeDelta: 0.25,
-        }}
-      >
-        {markedLocation && (
-          <Marker
-            coordinate={{
-              latitude: markedLocation.latitude,
-              longitude: markedLocation.longitude,
-            }}
-          />
-        )}
-      </MapView>
-    </View>
+      />
+    </MapView>
   );
 }
 
