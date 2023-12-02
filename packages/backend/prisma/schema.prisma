@@ -15,6 +15,7 @@ model Location {
   longitude Float
   latitude  Float
   court Court[]
+  user User[]
 }
 
 // User model
@@ -28,6 +29,8 @@ model User {
   captain Team?  @relation("captain")
   owner Owner?
   joinRequests Team[] @relation(name: "joinRequests")
+  location Location @relation(fields: [locationId], references: [id])
+  locationId Int
 }
 
 model Owner {
