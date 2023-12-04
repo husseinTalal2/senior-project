@@ -8,14 +8,15 @@ import {
   Pressable,
 } from "react-native";
 import { ScrollView } from "react-native-gesture-handler";
-import { api } from "../../utils/trpc";
 import { Image } from "expo-image";
-import useTheme from "../../utils/hooks/useTheme";
-import { router } from "expo-router";
+import { router, useGlobalSearchParams } from "expo-router";
+import { api } from "../../../utils/trpc";
+import useTheme from "../../../utils/hooks/useTheme";
 
-function Profile() {
+function UserProfile() {
+  const params = useGlobalSearchParams<{ id: string }>();
   const user = api.user.getById.useQuery({
-    id: "d143d69c-81ba-4dcf-a8f6-7d888294412e",
+    id: params.id,
   });
   const theme = useTheme();
 
@@ -132,4 +133,4 @@ function Profile() {
   }
 }
 
-export default Profile;
+export default UserProfile;

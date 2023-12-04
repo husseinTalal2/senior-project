@@ -2,7 +2,7 @@ import { z } from "zod";
 import { t } from "../trpc";
 import { getAll, getById, getCourtSchedule } from "../services/court.service";
 import { Role } from "@prisma/client";
-import { createUser } from "../services/user.service";
+import { createUser, getUserById } from "../services/user.service";
 
 const locationSchema = z.object({
   latitude: z.number(),
@@ -19,7 +19,13 @@ const userCreateSchema = z.object({
 });
 
 export const userRouter = t.router({
-  create: t.procedure.input(userCreateSchema).query(({ input }) => {
+  create: t.procedure.input(userCreateSchema).mutation(({ input }) => {
     return createUser(input);
   }),
+
+  getById: t.procedure
+    .input(z.object({ id: z.string() }))
+    .query(({ input }) => {
+      return getUserById(input.id);
+    }),
 });

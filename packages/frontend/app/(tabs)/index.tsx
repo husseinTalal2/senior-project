@@ -21,7 +21,6 @@ import CourtItem from "../../components/CourtItem";
 function Home() {
   const theme = useTheme();
   const courts = api.court.getAll.useQuery();
-  const r = useRouter();
 
   return (
     <SafeAreaView

@@ -35,3 +35,18 @@ export async function createUser({
     },
   });
 }
+
+export async function getUserById(id: string) {
+  return prisma.user.findUnique({
+    where: {
+      id,
+    },
+    include: {
+      teams: {
+        include: {
+          members: true,
+        },
+      },
+    },
+  });
+}

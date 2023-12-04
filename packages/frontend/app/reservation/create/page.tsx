@@ -6,7 +6,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import useTheme from "../../../utils/hooks/useTheme";
 import { api } from "../../../utils/trpc";
 import CustomCalendar from "../../../components/CustomCalendar";
-import { useGlobalSearchParams } from "expo-router";
+import { router, useGlobalSearchParams } from "expo-router";
 import DayTimePicker from "../../../components/DayTimePicker";
 import { useHookstate } from "@hookstate/core";
 import { reservationStates } from "../../../states/reservationStates";
@@ -35,6 +35,12 @@ function CreateReservation() {
   }, [selectedDay.get(), selectedTime.get()]);
 
   const reserveMutation = api.reservation.createNewReservation.useMutation();
+  if (reserveMutation.isSuccess) {
+    selectedDay.set(null);
+    selectedTime.set("");
+    router.replace(`/reservation/${reserveMutation.data.id}/page`);
+  }
+
   const handleReservePress = () => {
     const day = selectedDay.get();
     const time = selectedTime.get();
