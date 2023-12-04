@@ -48,7 +48,8 @@ model Team {
   members     User[]       @relation("teamMembers")
   captain     User         @relation(fields: [captainId], references: [id], name: "captain")
   captainId   String          @unique
-  reservations Reservation[]
+  homeReservations Reservation[] @relation(name: "homeTeamR")
+  awayReservations Reservation[] @relation(name: "awayTeamR")
   joinRequests User[] @relation(name: "joinRequests")
 }
 
@@ -56,7 +57,10 @@ model Reservation {
   id       Int      @id @default(autoincrement())
   from DateTime
   to DateTime
-  teams     Team[]
+  homeTeamId Int
+  homeTeam Team   @relation(fields: [homeTeamId], references: [id], name: "homeTeamR")
+  awayTeamId Int?
+  awayTeam Team?   @relation(fields: [awayTeamId], references: [id], name: "awayTeamR")
   court Court @relation(fields: [courtId], references: [id])
   courtId Int
   status ReservationStatus[]
