@@ -1,10 +1,12 @@
 import React from "react";
-import { StyleSheet, View, Platform, Text } from "react-native";
+import { StyleSheet, View, Platform, Text, Pressable } from "react-native";
 import { Theme } from "../constants/Theme";
 import { CourtType } from "../app/court/[id]";
 import { RouterOutput } from "backend";
 import Button from "./Button";
 import useTheme from "../utils/hooks/useTheme";
+import { router } from "expo-router";
+import { formatTime } from "../utils/dateUtils";
 
 type Reservation = RouterOutput["reservation"]["getByUserId"][0];
 function ReservationItem({ reservation }: { reservation: Reservation }) {
@@ -12,19 +14,35 @@ function ReservationItem({ reservation }: { reservation: Reservation }) {
   const handleCancelReservation = () => {};
 
   return (
-    <View style={styles(theme).container}>
-      <View style={styles(theme).subContainer}>
-        <Text>{reservation.court.address}</Text>
+    <Pressable
+      onPress={() => router.push(`/reservation/${reservation.id}/page`)}
+      style={styles(theme).container}
+    >
+      <View style={[{ flex: 1, justifyContent: "space-between" }]}>
+        <Text style={[theme.fonts.body["18pt_semibold"], { flex: 1 }]}>
+          {reservation.court.name}
+        </Text>
         <CourtType courtType={reservation.court.courtType} />
-        <View>
+        <View
+          style={{
+            flexDirection: "row",
+            flexWrap: "wrap",
+            gap: theme.spacing.sm,
+          }}
+        >
           {reservation.status.map((status) => {
             return <Chip status={status} />;
           })}
         </View>
       </View>
-      <View style={styles(theme).subContainer}>
-        <Text>
-          {reservation.from} - {reservation.to}
+      <View style={{ justifyContent: "space-between", alignItems: "flex-end" }}>
+        <Text
+          style={[
+            theme.fonts.body["18pt_regular"],
+            { flex: 1, textAlign: "right" },
+          ]}
+        >
+          {formatTime(reservation.from)} - {formatTime(reservation.to)}
         </Text>
         <Button
           text="Cancel"
@@ -32,25 +50,25 @@ function ReservationItem({ reservation }: { reservation: Reservation }) {
           onPress={handleCancelReservation}
         />
       </View>
-    </View>
+    </Pressable>
   );
 }
 
-const Chip = ({ status }: { status: Reservation["status"][0] }) => {
+export const Chip = ({ status }: { status: Reservation["status"][0] }) => {
   const theme = useTheme();
   const getBgColor = () => {
-    if ((status = "CONFIRMED")) return `${theme.colors.success}1c`;
-    if ((status = "DECLINED")) return `${theme.colors.accent01}`;
-    if ((status = "NO_ENOUGH_PLAYERS")) return `${theme.colors.accent01}`;
-    if ((status = "PENDING")) return `${theme.colors.warning}1c`;
+    if (status == "CONFIRMED") return `${theme.colors.success}19`;
+    if (status == "DECLINED") return `${theme.colors.accent01}`;
+    if (status == "NO_ENOUGH_PLAYERS") return `${theme.colors.accent01}`;
+    if (status == "PENDING") return `${theme.colors.warning}19`;
     return "#fff";
   };
 
   const getTextColor = () => {
-    if ((status = "CONFIRMED")) return `${theme.colors.success}`;
-    if ((status = "DECLINED")) return `${theme.colors.error02}`;
-    if ((status = "NO_ENOUGH_PLAYERS")) return `${theme.colors.error02}`;
-    if ((status = "PENDING")) return `${theme.colors.warning}`;
+    if (status == "CONFIRMED") return `${theme.colors.success}`;
+    if (status == "DECLINED") return `${theme.colors.error02}`;
+    if (status == "NO_ENOUGH_PLAYERS") return `${theme.colors.error02}`;
+    if (status == "PENDING") return `${theme.colors.warning}`;
     return "#000";
   };
 
@@ -86,13 +104,12 @@ const styles = (theme: Theme) =>
           shadowRadius: 10,
         },
       }),
+      backgroundColor: "#fff",
       borderRadius: theme.borderRadius.sm,
       padding: theme.spacing.lg,
       flexDirection: "row",
-    },
-    subContainer: {
-      flex: 1,
       justifyContent: "space-between",
+      flex: 1,
     },
   });
 

@@ -39,7 +39,7 @@ function CourtItem({ court }: { court: RouterOutput["court"]["getAll"][0] }) {
               color: theme.colors.shade02,
             }}
           >
-            {court.address}
+            {court.name}
           </Text>
           <Text
             style={{

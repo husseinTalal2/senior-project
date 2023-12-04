@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { StyleSheet, View } from "react-native";
+import { StyleProp, StyleSheet, View, ViewStyle } from "react-native";
 import MapView, { LatLng, Marker } from "react-native-maps";
 import * as Location from "expo-location";
 import { useNavigation } from "expo-router";
@@ -14,9 +14,10 @@ type Location = {
 type Props = {
   // setLocation: (props: LatLng) => void;
   location: Location;
+  style?: StyleProp<ViewStyle>;
 };
 
-function Map({ location }: Props) {
+function Map({ location, style }: Props) {
   const theme = useTheme();
   // const [markedLocation, setMarkedLocation] = useState<LatLng | null>(null);
   // const [userLocation, setUserLocation] = useState<LatLng | null>(null);
@@ -54,11 +55,13 @@ function Map({ location }: Props) {
       // onPress={({ nativeEvent }) => {
       //   handleSettingMarker(nativeEvent.coordinate);
       // }}
-      style={{
-        width: "100%",
-        height: 220,
-        marginVertical: theme.spacing["2xl"],
-      }}
+      style={[
+        {
+          width: "100%",
+          height: 220,
+        },
+        style,
+      ]}
       // showsUserLocation
       // followsUserLocation
       initialRegion={{

@@ -13,6 +13,7 @@ import {
 import { Input, Button } from "react-native-elements";
 import Icon from "react-native-vector-icons/FontAwesome";
 import { supabase } from "../lib/supabase";
+import { api } from "../utils/trpc";
 
 interface SignUpProps {
   onSignUp: (email: string, password: string) => void;
@@ -21,6 +22,15 @@ interface SignUpProps {
 const SignUp: React.FC<SignUpProps> = ({ onSignUp }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [name, setName] = useState("");
+  const [location, setLocation] = useState<{
+    longitude: number;
+    latitude: number;
+  }>({
+    latitude: 44,
+    longitude: 33,
+  });
+  const [role, setRole] = useState<"ADMIN" | "USER" | "OWNER">("USER");
   const [loading, setLoading] = useState(false);
 
   const handleSignUp = () => {
@@ -48,13 +58,22 @@ const SignUp: React.FC<SignUpProps> = ({ onSignUp }) => {
   async function signUpWithEmail() {
     setLoading(true);
     const {
-      data: { session },
+      data: { session, user },
       error,
     } = await supabase.auth.signUp({
       email: email,
       password: password,
     });
 
+    if (user) {
+      await api.user.create.useQuery({
+        id: user?.id,
+        email,
+        location,
+        name,
+        role,
+      });
+    }
     if (error) Alert.alert(error.message);
     if (!session)
       Alert.alert("Please check your inbox for email verification!");
@@ -78,7 +97,7 @@ const SignUp: React.FC<SignUpProps> = ({ onSignUp }) => {
           onChangeText={(text) => setPassword(text)}
           value={password}
         />
-        <Button title="Sign Up" onPress={signInWithEmail} />
+        <Button title="Sign Up" onPress={signUpWithEmail} />
       </View>
     </SafeAreaView>
   );

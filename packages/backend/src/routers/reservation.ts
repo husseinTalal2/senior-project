@@ -8,13 +8,13 @@ export const reservationRouter = t.router({
   }),
 
   getById: t.procedure
-    .input(z.object({ id: z.number() }))
+    .input(z.object({ id: z.number(), userId: z.string() }))
     .query(({ input }) => {
-      return getById(input.id);
+      return getById(input.id, input.userId);
     }),
 
   getByUserId: t.procedure
-    .input(z.object({ userId: z.number() }))
+    .input(z.object({ userId: z.string() }))
     .query(({ input }) => {
       return getByUserId(input.userId);
     }),

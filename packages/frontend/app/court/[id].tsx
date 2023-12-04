@@ -1,4 +1,4 @@
-import { useGlobalSearchParams, useRouter } from "expo-router";
+import { router, useGlobalSearchParams, useRouter } from "expo-router";
 import { CaretLeft, House, Shower, SoccerBall } from "phosphor-react-native";
 import React from "react";
 import {
@@ -7,22 +7,14 @@ import {
   Text,
   View,
   Platform,
-  Alert,
 } from "react-native";
-import {
-  SafeAreaView,
-  useSafeAreaInsets,
-} from "react-native-safe-area-context";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 import useTheme from "../../utils/hooks/useTheme";
 import { api } from "../../utils/trpc";
-import ImageSlider from "../../components/Slider";
 import { Image } from "expo-image";
 import Divider from "../../components/Divider";
-import { inferRouterOutputs } from "@trpc/server";
-import { AppRouter } from "backend";
 import Map from "../../components/Map";
 import { ScrollView } from "react-native-gesture-handler";
-import MapView, { Marker } from "react-native-maps";
 import Button from "../../components/Button";
 
 function CourtScreen() {
@@ -99,7 +91,13 @@ function CourtScreen() {
             <Divider />
             <Facilities facilities={court.data.facilities} />
             <Divider />
-            <Map location={court.data.location} />
+            <Map
+              style={{
+                marginVertical: theme.spacing["2xl"],
+                marginBottom: theme.spacing["4xl"],
+              }}
+              location={court.data.location}
+            />
           </View>
         </ScrollView>
         <View
@@ -132,7 +130,9 @@ function CourtScreen() {
           </Text>
           <Button
             text="Reserve"
-            onPress={() => Alert.alert("show modal for reservation")}
+            onPress={() =>
+              router.setParams({ courtId: String(court.data!.id) })
+            }
           />
         </View>
       </>
