@@ -20,7 +20,7 @@ model Location {
 
 // User model
 model User {
-  id      Int    @id @default(autoincrement())
+  id      String    @id 
   name    String
   email   String
   avatar String?
@@ -36,7 +36,7 @@ model User {
 model Owner {
   id      Int    @id @default(autoincrement())
   user    User @relation(fields: [userId], references: [id])
-  userId  Int  @unique
+  userId  String  @unique
   courts Court[]
 }
 
@@ -47,9 +47,8 @@ model Team {
   logo        String
   members     User[]       @relation("teamMembers")
   captain     User         @relation(fields: [captainId], references: [id], name: "captain")
-  captainId   Int          @unique
-  reservation Reservation @relation(fields: [reservationId], references: [id])
-  reservationId Int
+  captainId   String          @unique
+  reservations Reservation[]
   joinRequests User[] @relation(name: "joinRequests")
 }
 
@@ -65,6 +64,7 @@ model Reservation {
 
 model Court {
   id       Int      @id @default(autoincrement())
+  name String
   schedule DateTime[]
   reservations Reservation[]
   owner Owner @relation(fields: [ownerId], references: [id])
