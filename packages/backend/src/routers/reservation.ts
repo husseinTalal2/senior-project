@@ -1,6 +1,18 @@
 import { z } from "zod";
 import { t } from "../trpc";
-import { getAll, getById, getByUserId } from "../services/reservation.service";
+import {
+  createNewReservation,
+  getAll,
+  getById,
+  getByUserId,
+} from "../services/reservation.service";
+
+const ReservationCreateInputSchema = z.object({
+  from: z.date().or(z.string()), // Either a Date object or a string
+  to: z.date().or(z.string()), // Either a Date object or a string
+  homeTeamId: z.number(),
+  courtId: z.number(),
+});
 
 export const reservationRouter = t.router({
   getAll: t.procedure.query(() => {
@@ -17,5 +29,11 @@ export const reservationRouter = t.router({
     .input(z.object({ userId: z.string() }))
     .query(({ input }) => {
       return getByUserId(input.userId);
+    }),
+
+  createNewReservation: t.procedure
+    .input(ReservationCreateInputSchema)
+    .mutation(({ input }) => {
+      return createNewReservation(input);
     }),
 });

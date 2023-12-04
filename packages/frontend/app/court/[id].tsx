@@ -130,9 +130,9 @@ function CourtScreen() {
           </Text>
           <Button
             text="Reserve"
-            onPress={() =>
-              router.setParams({ courtId: String(court.data!.id) })
-            }
+            onPress={() => {
+              router.push(`/reservation/create/page?courtId=${court.data!.id}`);
+            }}
           />
         </View>
       </>

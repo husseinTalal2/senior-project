@@ -110,6 +110,7 @@ const styles = (theme: Theme) =>
       flexDirection: "row",
       justifyContent: "space-between",
       flex: 1,
+      marginBottom: theme.spacing.lg,
     },
   });
 

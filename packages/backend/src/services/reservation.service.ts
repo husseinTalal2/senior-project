@@ -1,3 +1,4 @@
+import { $Enums } from "@prisma/client";
 import { prisma } from "../../prisma/prisma";
 
 export async function getByUserId(userId: string) {
@@ -17,15 +18,34 @@ export async function getByUserId(userId: string) {
 
   return await prisma.reservation.findMany({
     where: {
-      teams: {
-        some: {
-          id: { in: teamsIds },
+      OR: [
+        {
+          homeTeamId: {
+            in: teamsIds,
+          },
         },
-      },
+        {
+          awayTeamId: {
+            in: teamsIds,
+          },
+        },
+      ],
     },
     include: {
       court: true,
-      teams: {
+      homeTeam: {
+        select: {
+          logo: true,
+          name: true,
+          members: {
+            select: {
+              id: true,
+            },
+          },
+          id: true,
+        },
+      },
+      awayTeam: {
         select: {
           logo: true,
           name: true,
@@ -43,6 +63,31 @@ export async function getByUserId(userId: string) {
 
 export async function getAll() {}
 
+type ReservationCreateInput = {
+  from: Date | string;
+  to: Date | string;
+  homeTeamId: number;
+  courtId: number;
+};
+export async function createNewReservation(data: ReservationCreateInput) {
+  return await prisma.reservation.create({
+    data: {
+      from: data.from,
+      to: data.to,
+      status: [$Enums.ReservationStatus.PENDING],
+      court: {
+        connect: {
+          id: data.courtId,
+        },
+      },
+      homeTeam: {
+        connect: {
+          id: data.homeTeamId,
+        },
+      },
+    },
+  });
+}
 export async function getById(id: number, userId: string) {
   const reservation = await prisma.reservation.findUnique({
     where: {
@@ -54,7 +99,18 @@ export async function getById(id: number, userId: string) {
           location: true,
         },
       },
-      teams: {
+      homeTeam: {
+        select: {
+          members: {
+            select: {
+              id: true,
+            },
+          },
+          name: true,
+          logo: true,
+        },
+      },
+      awayTeam: {
         select: {
           members: {
             select: {
@@ -68,12 +124,7 @@ export async function getById(id: number, userId: string) {
     },
   });
 
-  const opponentTeam = reservation?.teams.find((team) =>
-    team.members.find((m) => m.id !== userId)
-  );
-
   return {
     ...reservation,
-    opponentTeam,
   };
 }

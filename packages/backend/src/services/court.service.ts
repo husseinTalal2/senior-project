@@ -23,6 +23,8 @@ export async function getCourtSchedule(courtId: number) {
         select: {
           from: true,
           to: true,
+          homeTeamId: true,
+          awayTeamId: true,
         },
       },
     },

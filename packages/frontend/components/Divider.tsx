@@ -11,6 +11,7 @@ function Divider() {
         width: WIDTH - theme.spacing["2xl"] * 2,
         height: 2,
         backgroundColor: theme.colors.neutral05,
+        alignSelf: "center",
       }}
     />
   );

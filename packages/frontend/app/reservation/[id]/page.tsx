@@ -136,7 +136,7 @@ function Reservation() {
               </View>
             </View>
           </View> */}
-          {!!reservation.data.opponentTeam && (
+          {!!reservation.data.awayTeam && (
             <>
               <Divider />
               <View
@@ -177,11 +177,11 @@ function Reservation() {
                         style={{ width: 50, height: 50, borderRadius: 500 }}
                         contentFit="cover"
                         source={{
-                          uri: reservation.data.opponentTeam?.logo,
+                          uri: reservation.data.awayTeam?.logo,
                         }}
                       />
                       <Text style={theme.fonts.body["14pt_semibold"]}>
-                        {reservation.data.opponentTeam?.name}
+                        {reservation.data.awayTeam?.name}
                       </Text>
                     </View>
                     <Text
@@ -190,7 +190,7 @@ function Reservation() {
                         { color: theme.colors.neutral08 },
                       ]}
                     >
-                      {reservation.data.opponentTeam?.members.length} members
+                      {reservation.data.awayTeam?.members.length} members
                     </Text>
                   </View>
                 </View>
@@ -253,7 +253,7 @@ function Reservation() {
   }
 }
 
-function Header({ title }: { title: string }) {
+export function Header({ title }: { title: string }) {
   const insets = useSafeAreaInsets();
   const theme = useTheme();
   return (
