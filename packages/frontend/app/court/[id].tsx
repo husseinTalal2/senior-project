@@ -16,11 +16,30 @@ import Divider from "../../components/Divider";
 import Map from "../../components/Map";
 import { ScrollView } from "react-native-gesture-handler";
 import Button from "../../components/Button";
+import { Chip } from "../../components/ReservationItem";
+import { formatTime } from "../../utils/dateUtils";
+// import { ReservationItem } from "../team/[id]/page";
 
 function CourtScreen() {
   const params = useGlobalSearchParams<{ id: string }>();
   const theme = useTheme();
   const court = api.court.getById.useQuery({ id: parseInt(params.id) });
+  const reserveMutation =
+    api.reservation.createNewReservationById.useMutation();
+
+  const handleCreateReservation = (
+    reservationId: number,
+    awayTeamId: number
+  ) => {
+    reserveMutation.mutate({
+      awayTeamId,
+      reservationId,
+    });
+  };
+
+  if (reserveMutation.isSuccess) {
+    router.replace(`/reservation/${reserveMutation.data.id}/page`);
+  }
 
   if (court.isLoading) {
     return (
@@ -71,7 +90,7 @@ function CourtScreen() {
                     color: theme.colors.shade02,
                   }}
                 >
-                  {court.data.address}
+                  {court.data.name}
                 </Text>
                 <Text
                   style={{
@@ -98,6 +117,91 @@ function CourtScreen() {
               }}
               location={court.data.location}
             />
+            <Divider />
+            <View style={{ marginTop: theme.spacing["2xl"] }}>
+              <Text
+                style={[
+                  theme.fonts.header["22pt_semibold"],
+                  { marginBottom: theme.spacing.lg },
+                ]}
+              >
+                Current Reservations
+              </Text>
+              {court.data.reservations.map((reservation) => {
+                return (
+                  <Pressable
+                    onPress={() =>
+                      router.push(`/reservation/${reservation.id}/page`)
+                    }
+                    style={{
+                      ...Platform.select({
+                        android: {
+                          elevation: 3,
+                        },
+                        ios: {
+                          shadowColor: "#000000",
+                          shadowOffset: { width: 0, height: 2 },
+                          shadowOpacity: 0.1,
+                          shadowRadius: 10,
+                        },
+                      }),
+                      backgroundColor: "#fff",
+                      borderRadius: theme.borderRadius.sm,
+                      padding: theme.spacing.lg,
+                      flexDirection: "row",
+                      justifyContent: "space-between",
+                      flex: 1,
+                      marginBottom: theme.spacing.lg,
+                    }}
+                  >
+                    <View
+                      style={[{ flex: 1, justifyContent: "space-between" }]}
+                    >
+                      <Text
+                        style={[theme.fonts.body["18pt_semibold"], { flex: 1 }]}
+                      >
+                        {court.data?.name}
+                      </Text>
+                      <CourtType courtType={court.data!.courtType} />
+                      <View
+                        style={{
+                          flexDirection: "row",
+                          flexWrap: "wrap",
+                          gap: theme.spacing.sm,
+                        }}
+                      >
+                        {reservation.status.map((status) => {
+                          return <Chip status={status} />;
+                        })}
+                      </View>
+                    </View>
+                    <View
+                      style={{
+                        justifyContent: "space-between",
+                        alignItems: "flex-end",
+                      }}
+                    >
+                      <Text
+                        style={[
+                          theme.fonts.body["18pt_regular"],
+                          { flex: 1, textAlign: "right" },
+                        ]}
+                      >
+                        {formatTime(reservation.from)} -{" "}
+                        {formatTime(reservation.to)}
+                      </Text>
+                      <Button
+                        text="Reserve"
+                        type="success"
+                        onPress={() =>
+                          handleCreateReservation(reservation.id, 2)
+                        }
+                      />
+                    </View>
+                  </Pressable>
+                );
+              })}
+            </View>
           </View>
         </ScrollView>
         <View

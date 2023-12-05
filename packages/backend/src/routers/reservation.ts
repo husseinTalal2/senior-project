@@ -2,6 +2,7 @@ import { z } from "zod";
 import { t } from "../trpc";
 import {
   createNewReservation,
+  createNewReservationById,
   getAll,
   getById,
   getByUserId,
@@ -35,5 +36,11 @@ export const reservationRouter = t.router({
     .input(ReservationCreateInputSchema)
     .mutation(({ input }) => {
       return createNewReservation(input);
+    }),
+
+  createNewReservationById: t.procedure
+    .input(z.object({ reservationId: z.number(), awayTeamId: z.number() }))
+    .mutation(({ input }) => {
+      return createNewReservationById(input.reservationId, input.awayTeamId);
     }),
 });

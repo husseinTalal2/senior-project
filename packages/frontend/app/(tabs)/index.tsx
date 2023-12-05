@@ -7,7 +7,7 @@ import {
   View,
 } from "react-native";
 import { api } from "../../utils/trpc";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useLocalStorage } from "../../utils/hooks/useLocalStorage";
 import useTheme from "../../utils/hooks/useTheme";
 import { ShoppingCartSimple } from "phosphor-react-native";
@@ -20,7 +20,11 @@ import CourtItem from "../../components/CourtItem";
 
 function Home() {
   const theme = useTheme();
-  const courts = api.court.getAll.useQuery();
+  const [search, setSearch] = useState<string | undefined>();
+
+  const courts = api.court.getAll.useQuery({
+    search,
+  });
 
   return (
     <SafeAreaView
@@ -35,7 +39,7 @@ function Home() {
           overflow: "visible",
         }}
       >
-        <SearchInput placeholder="Search" />
+        <SearchInput setSearchQuery={setSearch} placeholder="Search" />
         {courts.isLoading && <ActivityIndicator />}
         {courts.isFetched && (
           <FlashList

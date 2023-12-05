@@ -234,7 +234,7 @@ function Page() {
   }
 }
 
-function ReservationItem({ reservation }: { reservation: any }) {
+export function ReservationItem({ reservation }: { reservation: any }) {
   const theme = useTheme();
   const handleCancelReservation = () => {};
 

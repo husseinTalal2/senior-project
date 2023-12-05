@@ -1,7 +1,13 @@
 import { prisma } from "../../prisma/prisma";
 
-export async function getAll() {
-  return await prisma.court.findMany({});
+export async function getAll(searchQuery: string | undefined) {
+  return await prisma.court.findMany({
+    where: {
+      name: {
+        contains: searchQuery,
+      },
+    },
+  });
 }
 
 export async function getById(id: number) {
@@ -9,6 +15,16 @@ export async function getById(id: number) {
     where: { id },
     include: {
       location: true,
+      reservations: {
+        where: {
+          awayTeamId: {
+            equals: null,
+          },
+        },
+        include: {
+          homeTeam: true,
+        },
+      },
     },
   });
 }

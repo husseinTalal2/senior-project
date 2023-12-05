@@ -7,9 +7,13 @@ import useTheme from "../utils/hooks/useTheme";
 
 interface SearchInputProps {
   placeholder: string;
+  setSearchQuery: (text: string) => void;
 }
 
-const SearchInput: React.FC<SearchInputProps> = ({ placeholder }) => {
+const SearchInput: React.FC<SearchInputProps> = ({
+  placeholder,
+  setSearchQuery,
+}) => {
   const theme = useTheme();
   return (
     <View style={styles(theme).container}>
@@ -17,6 +21,9 @@ const SearchInput: React.FC<SearchInputProps> = ({ placeholder }) => {
         style={styles(theme).input}
         placeholder={placeholder}
         placeholderTextColor="#888"
+        onChange={(e) => {
+          setSearchQuery(e.nativeEvent.text);
+        }}
       />
       <Sliders color="#888" weight="thin" size={20} />
     </View>

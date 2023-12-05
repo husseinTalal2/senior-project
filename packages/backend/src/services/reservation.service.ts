@@ -88,6 +88,25 @@ export async function createNewReservation(data: ReservationCreateInput) {
     },
   });
 }
+
+export async function createNewReservationById(
+  reservationId: number,
+  awayTeamId: number
+) {
+  return await prisma.reservation.update({
+    where: {
+      id: reservationId,
+    },
+    data: {
+      awayTeam: {
+        connect: {
+          id: awayTeamId,
+        },
+      },
+    },
+  });
+}
+
 export async function getById(id: number, userId: string) {
   const reservation = await prisma.reservation.findUnique({
     where: {
