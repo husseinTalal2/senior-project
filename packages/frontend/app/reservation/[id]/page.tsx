@@ -157,7 +157,10 @@ function Reservation() {
                   Opponent Team
                 </Text>
                 <View>
-                  <View
+                  <Pressable
+                    onPress={() => {
+                      router.push(`/team/${reservation.data.awayTeamId}/page`);
+                    }}
                     style={{
                       flexDirection: "row",
                       justifyContent: "space-between",
@@ -192,7 +195,7 @@ function Reservation() {
                     >
                       {reservation.data.awayTeam?.members.length} members
                     </Text>
-                  </View>
+                  </Pressable>
                 </View>
               </View>
             </>
