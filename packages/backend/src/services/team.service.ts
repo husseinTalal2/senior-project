@@ -30,8 +30,17 @@ export async function getTeamById(id: number) {
   });
 }
 
-export async function getAllTeams() {
+export async function getAllTeams(userId: string) {
   return prisma.team.findMany({
+    where: {
+      NOT: {
+        members: {
+          some: {
+            id: userId,
+          },
+        },
+      },
+    },
     include: {
       members: true,
     },

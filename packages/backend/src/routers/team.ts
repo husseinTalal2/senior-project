@@ -9,7 +9,13 @@ export const teamRouter = t.router({
       return getTeamById(input.id);
     }),
 
-  getAll: t.procedure.query(({ input }) => {
-    return getAllTeams();
-  }),
+  getAll: t.procedure
+    .input(
+      z.object({
+        id: z.string(),
+      })
+    )
+    .query(({ input }) => {
+      return getAllTeams(input.id);
+    }),
 });

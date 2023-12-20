@@ -16,9 +16,11 @@ import Button from "../components/Button";
 import { useUser } from "../utils/hooks/useUser";
 
 function DiscoverTeams() {
-  const teams = api.team.getAll.useQuery();
-  const theme = useTheme();
   const { user } = useUser();
+  const teams = api.team.getAll.useQuery({
+    id: user.data?.id || "",
+  });
+  const theme = useTheme();
 
   if (teams.isLoading) {
     return (
