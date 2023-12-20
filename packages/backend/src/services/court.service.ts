@@ -47,4 +47,21 @@ export async function getCourtSchedule(courtId: number) {
   });
 }
 
+export async function getCourtsReservationsByOwner(ownerUserId: string) {
+  const owner = await prisma.owner.findUnique({
+    where: {
+      userId: ownerUserId,
+    },
+  });
+
+  return prisma.court.findMany({
+    where: {
+      ownerId: owner?.id,
+    },
+    include: {
+      reservations: true,
+    },
+  });
+}
+
 export async function getNearest() {}

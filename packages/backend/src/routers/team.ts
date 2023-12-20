@@ -1,6 +1,6 @@
 import { z } from "zod";
 import { t } from "../trpc";
-import { getTeamById } from "../services/team.service";
+import { getAllTeams, getTeamById } from "../services/team.service";
 
 export const teamRouter = t.router({
   getTeamById: t.procedure
@@ -8,4 +8,8 @@ export const teamRouter = t.router({
     .query(({ input }) => {
       return getTeamById(input.id);
     }),
+
+  getAll: t.procedure.query(({ input }) => {
+    return getAllTeams();
+  }),
 });

@@ -6,12 +6,20 @@ import ReservationItem from "../../components/ReservationItem";
 import useTheme from "../../utils/hooks/useTheme";
 import { ScrollView } from "react-native-gesture-handler";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { useLocalUser, useUser } from "../../utils/hooks/useUser";
+import OwnerReservations from "../../components/OwnerReservations";
 
 function Reservations() {
   const theme = useTheme();
+  const { user } = useUser();
+
   const reservations = api.reservation.getByUserId.useQuery({
-    userId: "d143d69c-81ba-4dcf-a8f6-7d888294412e",
+    userId: user.data?.id || "",
   });
+
+  if (user.data?.role === "OWNER") {
+    return <OwnerReservations userId={user.data.id} />;
+  }
 
   if (reservations.isLoading) {
     return (
@@ -35,7 +43,6 @@ function Reservations() {
           width: "100%",
           justifyContent: "center",
           alignItems: "center",
-          backgroundColor: "red",
         }}
       >
         <Text style={theme.fonts.header["22pt_semibold"]}>
@@ -44,8 +51,6 @@ function Reservations() {
       </View>
     );
   }
-
-  console.log(reservations.data);
 
   return (
     <SafeAreaView

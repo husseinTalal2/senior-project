@@ -6,7 +6,9 @@ import {
   getAll,
   getById,
   getByUserId,
+  updateReservationStatus,
 } from "../services/reservation.service";
+import { ReservationStatus } from "@prisma/client";
 
 const ReservationCreateInputSchema = z.object({
   from: z.date().or(z.string()), // Either a Date object or a string
@@ -36,6 +38,22 @@ export const reservationRouter = t.router({
     .input(ReservationCreateInputSchema)
     .mutation(({ input }) => {
       return createNewReservation(input);
+    }),
+
+  updateStatus: t.procedure
+    .input(
+      z.object({
+        reservationId: z.number(),
+        status: z.enum([
+          ReservationStatus.CONFIRMED,
+          ReservationStatus.DECLINED,
+          ReservationStatus.NO_ENOUGH_PLAYERS,
+          ReservationStatus.PENDING,
+        ]),
+      })
+    )
+    .mutation(({ input }) => {
+      return updateReservationStatus(input.reservationId, input.status);
     }),
 
   createNewReservationById: t.procedure

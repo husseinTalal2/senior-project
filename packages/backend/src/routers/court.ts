@@ -1,6 +1,11 @@
 import { z } from "zod";
 import { t } from "../trpc";
-import { getAll, getById, getCourtSchedule } from "../services/court.service";
+import {
+  getAll,
+  getById,
+  getCourtSchedule,
+  getCourtsReservationsByOwner,
+} from "../services/court.service";
 
 export const courtRouter = t.router({
   getAll: t.procedure
@@ -19,5 +24,11 @@ export const courtRouter = t.router({
     .input(z.object({ id: z.number() }))
     .query(({ input }) => {
       return getCourtSchedule(input.id);
+    }),
+
+  getOwnerReservations: t.procedure
+    .input(z.object({ ownerUserId: z.string() }))
+    .query(({ input }) => {
+      return getCourtsReservationsByOwner(input.ownerUserId);
     }),
 });

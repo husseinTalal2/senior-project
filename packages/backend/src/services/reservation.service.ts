@@ -1,4 +1,4 @@
-import { $Enums } from "@prisma/client";
+import { $Enums, ReservationStatus } from "@prisma/client";
 import { prisma } from "../../prisma/prisma";
 
 export async function getByUserId(userId: string) {
@@ -103,6 +103,33 @@ export async function createNewReservationById(
           id: awayTeamId,
         },
       },
+    },
+  });
+}
+
+export async function updateReservationStatus(
+  reservationId: number,
+  status: ReservationStatus
+) {
+  const reservation = await prisma.reservation.findUnique({
+    where: {
+      id: reservationId,
+    },
+  });
+  const reservationStatus = reservation?.status;
+  let updateData: ReservationStatus[] = [];
+  if (status === "CONFIRMED") {
+    updateData.push(status);
+  }
+  if (status === "DECLINED") {
+    updateData.push(status);
+  }
+  return prisma.reservation.update({
+    where: {
+      id: reservationId,
+    },
+    data: {
+      status: updateData,
     },
   });
 }

@@ -140,7 +140,11 @@ function Page() {
               {team.data.joinRequests.map((member) => {
                 return (
                   <Pressable
-                    onPress={() => router.push(`/user/${member.id}/page`)}
+                    onPress={() => {
+                      console.log(member);
+
+                      router.push(`/user/${member.id}/page`);
+                    }}
                     style={{
                       flexDirection: "row",
                       justifyContent: "space-between",

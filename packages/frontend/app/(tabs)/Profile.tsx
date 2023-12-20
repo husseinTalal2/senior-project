@@ -1,4 +1,3 @@
-import React from "react";
 import {
   ActivityIndicator,
   SafeAreaView,
@@ -8,16 +7,18 @@ import {
   Pressable,
 } from "react-native";
 import { ScrollView } from "react-native-gesture-handler";
-import { api } from "../../utils/trpc";
 import { Image } from "expo-image";
 import useTheme from "../../utils/hooks/useTheme";
 import { router } from "expo-router";
+import { useUser } from "../../utils/hooks/useUser";
+import { supabase } from "../../lib/supabase";
+import Button from "../../components/Button";
 
 function Profile() {
-  const user = api.user.getById.useQuery({
-    id: "d143d69c-81ba-4dcf-a8f6-7d888294412e",
-  });
   const theme = useTheme();
+  const { user } = useUser();
+
+  console.log(user.data);
 
   if (user.isLoading) {
     return (
@@ -38,6 +39,15 @@ function Profile() {
     return (
       <ScrollView style={{ backgroundColor: "#fff" }}>
         <SafeAreaView>
+          <Pressable
+            onPress={() => {
+              supabase.auth.signOut().then(() => {
+                router.replace("/Signin");
+              });
+            }}
+          >
+            <Text>Sign out</Text>
+          </Pressable>
           <View
             style={{
               justifyContent: "center",
@@ -73,6 +83,12 @@ function Profile() {
             }}
           >
             <Text style={theme.fonts.header["22pt_semibold"]}>Teams</Text>
+            <Button
+              onPress={() => {
+                router.push("/DiscoverTeams");
+              }}
+              text="Discover Teams"
+            />
             <View style={{ flexDirection: "row", flexWrap: "wrap" }}>
               {user.data.teams.map((team) => {
                 return (

@@ -8,7 +8,7 @@ import localhost from "react-native-localhost";
 export const api = createTRPCReact<AppRouter>();
 
 export const getBaseUrl = (): string => {
-  return `http://192.168.1.11:4000`;
+  return `http://192.168.1.15:4000`;
 };
 
 export function TRPCProvider(props: { children: JSX.Element }) {

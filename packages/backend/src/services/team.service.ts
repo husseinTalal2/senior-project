@@ -29,3 +29,11 @@ export async function getTeamById(id: number) {
     },
   });
 }
+
+export async function getAllTeams() {
+  return prisma.team.findMany({
+    include: {
+      members: true,
+    },
+  });
+}

@@ -15,6 +15,8 @@ import useTheme from "../../../utils/hooks/useTheme";
 
 function UserProfile() {
   const params = useGlobalSearchParams<{ id: string }>();
+  console.log({ params });
+
   const user = api.user.getById.useQuery({
     id: params.id,
   });
