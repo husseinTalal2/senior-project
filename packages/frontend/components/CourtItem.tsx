@@ -70,6 +70,7 @@ const styles = (theme: Theme) =>
   StyleSheet.create({
     container: {
       backgroundColor: "#fff",
+      marginBottom: 14,
       minHeight: 290,
       overflow: "visible",
       borderRadius: theme.borderRadius.sm,
